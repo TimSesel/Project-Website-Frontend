@@ -14,11 +14,11 @@ function Map(){
                     flex: 'initial',
                     bgcolor: 'transparent', '&:hover': {bgcolor: 'background.level1',},
                     [`&.${tabClasses.selected}`]: {
-                        color: 'primary.plainColor', '&::after': {
+                        color: 'primary.100', '&::after': {
                             height: 2,
                             borderTopLeftRadius: 16,
                             borderTopRightRadius: 16,
-                            bgcolor: 'primary.500',
+                            bgcolor: 'primary.100',
                         },
                     },
                 },

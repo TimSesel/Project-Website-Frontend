@@ -12,7 +12,7 @@ import Typography from '@mui/joy/Typography';
 function Header(props) {
     return (
         <header>
-            <Typography level="h1" sx={{ textAlign: 'center', mb: '25px', mt: '25px' }}>{props.title}</Typography>
+            <Typography level="h1" sx={{ color: 'primary.100', textAlign: 'center', mb: '25px', mt: '25px' }}>{props.title}</Typography>
             <Box component="nav" aria-label={props.title} sx={{ flexGrow: 1 }} >
                 <List role="menubar" orientation="horizontal" variant="outlined">
                     <ListItem role="none">
