@@ -6,12 +6,13 @@ import ListDivider from '@mui/joy/ListDivider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import Home from '@mui/icons-material/Home';
+import Accout from '@mui/icons-material/AccountCircle';
 import Typography from '@mui/joy/Typography';
 
 function Header(props) {
     return (
         <header>
-            <Typography level="h1" sx={{ textAlign: 'center', mb: '25px' }}>{props.title}</Typography>
+            <Typography level="h1" sx={{ color: 'primary.100', textAlign: 'center', mb: '25px', mt: '25px' }}>{props.title}</Typography>
             <Box component="nav" aria-label={props.title} sx={{ flexGrow: 1 }} >
                 <List role="menubar" orientation="horizontal" variant="outlined">
                     <ListItem role="none">
@@ -26,7 +27,7 @@ function Header(props) {
                                     <ListDivider />
                                     <ListItem role="none">
                                         <ListItemButton role="menuitem" component="a" href="/profile">
-                                            Profile
+                                            <Accout />
                                         </ListItemButton>
                                     </ListItem>
                                     <ListItem role="none" sx={{ marginInlineStart: 'auto' }}>
