@@ -48,5 +48,5 @@ function Map() {
       </VStack>
     </div>
   );
-
+}
 export default Map;
