@@ -13,6 +13,30 @@ function Login() {
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
+  /*
+  // BEWARE: Might have to tweak route and or address
+  async function logIn(e){
+    e.preventDefault();
+    const res = await fetch("http://localhost:3001/users/login", {
+      method: "POST",
+      credentials: "include",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    });
+    const data = await res.json();
+    if(data._id !== undefined){
+      userContext.setUserContext(data);
+    } else {
+      setUsername("");
+      setPassword("");
+      setError("Invalid username or password");
+    }
+  }
+  */
+
   async function logIn(e) {
     e.preventDefault();
     setError("The error message is working!!")

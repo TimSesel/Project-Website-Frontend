@@ -14,6 +14,33 @@ function Register() {
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
+  /*
+  // BEWARE: Might have to tweak route and or address
+  async function Register(e){
+    e.preventDefault();
+    const res = await fetch("http://localhost:3001/users", {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        username: username,
+        password: password
+      })
+    });
+    const data = await res.json();
+    if(data._id !== undefined){
+      window.location.href="/";
+    }
+    else{
+      setUsername("");
+      setPassword("");
+      setEmail("");
+      setError("Registration failed");
+    }
+  }
+  */
+
   async function register(e) {
     e.preventDefault();
     setError("The error message is working!!")
