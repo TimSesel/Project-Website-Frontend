@@ -1,4 +1,4 @@
-import { useMap, MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useMap, MapContainer, TileLayer, Marker, Popup, Pane, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import Button from "@mui/joy";
@@ -15,6 +15,7 @@ function MapPositionSetter({ position }) {
 
 function Map() {
   const [position, setPosition] = useState([0, 0]);
+  const [areas, setAreas] = useState([]);
 
   function getCurrentPosition() {
     if (navigator.geolocation) {
@@ -28,6 +29,8 @@ function Map() {
 
   useEffect(() => {
     getCurrentPosition();
+
+
   }, []);
 
   return (
@@ -43,6 +46,9 @@ function Map() {
             <Popup>
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
+            <Circle center={position} radius={200} fillColor="red" color="red" />
+            <Circle center={[position[0] + 0.005, position[1] + 0.005]} radius={500} fillColor="yellow" color="yellow" />
+            <Circle center={[position[0] + 0.012, position[1] - 0.035]} radius={200} fillColor="green" color="green" />
           </Marker>
         </MapContainer>
       </VStack>
