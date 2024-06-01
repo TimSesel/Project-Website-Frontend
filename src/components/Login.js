@@ -13,7 +13,6 @@ function Login() {
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
-  /*
   // BEWARE: Might have to tweak route and or address
   async function logIn(e){
     e.preventDefault();
@@ -35,13 +34,14 @@ function Login() {
       setError("Invalid username or password");
     }
   }
-  */
 
+  /*
   async function logIn(e) {
     e.preventDefault();
     setError("The error message is working!!")
     console.log(`Username: ${username}\nPassword: ${password}`);
   }
+  */
 
   return (
     <Card sx={{ p: 5 }}>
@@ -56,7 +56,7 @@ function Login() {
             name="username"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => (setUsername(e.target.value))}
             sx={{ mb: 2 }}
           />
           <Input
@@ -64,7 +64,7 @@ function Login() {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => (setPassword(e.target.value))}
           />
           <hr/>
           <Typography level="body-md" sx={{ color:'danger.400', textAlign: 'center', m: 2 }}>

@@ -14,9 +14,8 @@ function Register() {
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
-  /*
   // BEWARE: Might have to tweak route and or address
-  async function Register(e){
+  async function register(e){
     e.preventDefault();
     const res = await fetch("http://localhost:3001/users", {
       method: 'POST',
@@ -39,8 +38,8 @@ function Register() {
       setError("Registration failed");
     }
   }
-  */
 
+  /*
   async function register(e) {
     e.preventDefault();
     setError("The error message is working!!")
@@ -48,6 +47,7 @@ function Register() {
       `Email: ${email}\nUsername: ${username}\nPassword: ${password}`,
     );
   }
+  */
 
   return (
     <Card sx={{ p: 5 }}>
