@@ -1,7 +1,6 @@
 import { useMap, MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
-import Button from "@mui/joy";
 import VStack from "@mui/joy/Stack";
 
 function MapPositionSetter({ position }) {
@@ -20,7 +19,7 @@ function Map() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (pos) {
         setPosition([pos.coords.latitude, pos.coords.longitude]);
-      });
+      }, function(){}, {enableHighAccuracy: true},);
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
@@ -48,5 +47,6 @@ function Map() {
       </VStack>
     </div>
   );
+}
 
 export default Map;

@@ -13,7 +13,35 @@ function Login() {
 
   async function logIn(e) {
     e.preventDefault();
-    console.log(`Username: ${username}\nPassword: ${password}`);
+
+    if (!username) {
+      alert("Enter a username");
+      return;
+    }
+    if (!password) {
+      alert("Enter a password");
+      return;
+    }
+
+    const res = await fetch("http://localhost:3001/users/login", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    });
+
+    const data = await res.json();
+    if (data._id !== undefined) {
+      userContext.setUserContext(data);
+    } else {
+      setUsername("");
+      setPassword("");
+      alert("Couldn't log in");
+      return;
+    }
   }
 
   return (

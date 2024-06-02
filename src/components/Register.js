@@ -11,9 +11,42 @@ function Register() {
 
   async function register(e) {
     e.preventDefault();
-    console.log(
-      `Email: ${email}\nUsername: ${username}\nPassword: ${password}`,
-    );
+
+    if (!email) {
+      alert("Enter an email");
+      return;
+    }
+    if (!username) {
+      alert("Enter a username");
+      return;
+    }
+    if (!password) {
+      alert("Enter a password");
+      return;
+    }
+
+    e.preventDefault();
+    const res = await fetch("http://localhost:3001/users", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        username: username,
+        password: password,
+      }),
+    });
+
+    const data = await res.json();
+    if (data._id !== undefined) {
+      window.location.href = "/";
+    } else {
+      setUsername("");
+      setPassword("");
+      setEmail("");
+      alert("Couldn't register");
+      return;
+    }
   }
 
   return (

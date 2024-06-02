@@ -80,5 +80,6 @@ function Header(props) {
       </Box>
     </header>
   );
+}
 
 export default Header;
