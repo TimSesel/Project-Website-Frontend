@@ -10,7 +10,7 @@ import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
 
-import L from "leaflet";
+import L, { LatLng } from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -37,7 +37,7 @@ function MapPositionSetter({ position }) {
 
 function Map() {
   const [position, setPosition] = useState([0, 0]);
-  const [areas, setAreas] = useState([]);
+  const [noises, setNoises] = useState([]);
 
   function getCurrentPosition() {
     if (navigator.geolocation) {
@@ -49,8 +49,20 @@ function Map() {
     }
   }
 
+  async function getNoises() {
+    const res = await fetch("http://localhost:3001/datas", {
+      method: "GET",
+    });
+    const data = await res.json();
+    if (data) {
+      setNoises(data);
+    }
+    console.log(noises);
+  }
+
   useEffect(() => {
     getCurrentPosition();
+    getNoises();
   }, []);
 
   return (
@@ -63,27 +75,16 @@ function Map() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <Marker position={position}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-            <Circle
-              center={position}
-              radius={200}
-              fillColor="red"
-              color="red"
-            />
-            <Circle
-              center={[position[0] + 0.005, position[1] + 0.005]}
-              radius={500}
-              fillColor="yellow"
-              color="yellow"
-            />
-            <Circle
-              center={[position[0] + 0.012, position[1] - 0.035]}
-              radius={200}
-              fillColor="green"
-              color="green"
-            />
+            <>
+              {noises.map((noise) => (
+                <Circle
+                  center={[noise.latitude, noise.longitude]}
+                  radius={noise.decibels * 100}
+                  color="red"
+                  fillColor="red"
+                />
+              ))}
+            </>
           </Marker>
         </MapContainer>
       </VStack>
