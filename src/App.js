@@ -40,7 +40,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <CssVarsProvider theme={theme} defaultMode="light">
+      <CssVarsProvider theme={theme} defaultMode="dark">
         <BrowserRouter>
           <UserContext.Provider value={{
             user: user,
