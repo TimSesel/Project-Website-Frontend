@@ -46,6 +46,22 @@ function Map() {
 
     mqttClient.on("message", (topic, message) => {
       console.log(`[MQTT] Topic: ${topic}, Message: ${message.toString()}`);
+      try {
+        let noise = JSON.parse(message.toString());
+        if (
+          typeof noise === "object" &&
+          noise !== null &&
+          noise.hasOwnProperty("latitude") &&
+          noise.hasOwnProperty("longitude") &&
+          noise.hasOwnProperty("decibels")
+        ) {
+          setNoises((noises) => [...noises, noise]);
+        } else {
+          throw new Error("Invalid noise format");
+        }
+      } catch (e) {
+        console.error(`[MQTT] ${e.error}`);
+      }
     });
 
     return () => {
