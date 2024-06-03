@@ -1,10 +1,4 @@
-import {
-  useMap,
-  MapContainer,
-  TileLayer,
-  Marker,
-  Circle,
-} from "react-leaflet";
+import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
@@ -13,6 +7,7 @@ import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import mqtt from "mqtt";
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: markerIcon,
@@ -38,6 +33,28 @@ function Map() {
   const [position, setPosition] = useState([0, 0]);
   const [noises, setNoises] = useState([]);
 
+  function createMqttClient() {
+    const mqttClient = mqtt.connect("mqtt://localhost");
+    mqttClient.on("connect", () => {
+      alert("MQTT connected");
+      mqttClient.subscribe("noise/updates", (err) => {
+        console.log(`Error: ${err}`);
+      });
+    });
+
+    mqttClient.on("error", (err) => {
+      console.log(`MQTT error: ${err}`);
+    });
+
+    mqttClient.on("message", (topic, message) => {
+      console.log(`Topic: ${topic}\nMessage: ${message.toString()}`);
+    });
+
+    return () => {
+      mqttClient.end();
+    };
+  }
+
   function getCurrentPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (pos) {
@@ -56,12 +73,12 @@ function Map() {
     if (data) {
       setNoises(data);
     }
-    console.log(noises);
   }
 
   useEffect(() => {
     getCurrentPosition();
     getNoises();
+    return createMqttClient();
   }, []);
 
   return (
@@ -75,8 +92,9 @@ function Map() {
           />
           <Marker position={position}>
             <>
-              {noises.map((noise) => (
+              {noises.map((noise, index) => (
                 <Circle
+                  key={index}
                   center={[noise.latitude, noise.longitude]}
                   radius={noise.decibels * 100}
                   color="red"
