@@ -1,19 +1,13 @@
-import {
-  useMap,
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Circle,
-} from "react-leaflet";
+import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
 
-import L, { LatLng } from "leaflet";
+import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import mqtt from "mqtt";
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: markerIcon,
@@ -39,6 +33,43 @@ function Map() {
   const [position, setPosition] = useState([0, 0]);
   const [noises, setNoises] = useState([]);
 
+  function createMqttClient() {
+    const mqttClient = mqtt.connect("ws://localhost:8888", { keepalive: 75 });
+    mqttClient.on("connect", () => {
+      console.log("[MQTT] Connected");
+      mqttClient.subscribe("noise/updates", (err) => {
+        if (!err) {
+          console.log("[MQTT] Subscribed to noise/updates");
+        }
+      });
+    });
+
+    mqttClient.on("message", (topic, message) => {
+      console.log(`[MQTT] Topic: ${topic}, Message: ${message.toString()}`);
+      try {
+        let noise = JSON.parse(message.toString());
+        if (
+          typeof noise === "object" &&
+          noise !== null &&
+          noise.hasOwnProperty("latitude") &&
+          noise.hasOwnProperty("longitude") &&
+          noise.hasOwnProperty("decibels")
+        ) {
+          setNoises((noises) => [...noises, noise]);
+        } else {
+          throw new Error("Invalid noise format");
+        }
+      } catch (e) {
+        console.error(`[MQTT] ${e.error}`);
+      }
+    });
+
+    return () => {
+      mqttClient.end();
+      console.log("[MQTT] Disconnected");
+    };
+  }
+
   function getCurrentPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (pos) {
@@ -57,12 +88,12 @@ function Map() {
     if (data) {
       setNoises(data);
     }
-    console.log(noises);
   }
 
   useEffect(() => {
     getCurrentPosition();
     getNoises();
+    return createMqttClient();
   }, []);
 
   return (
@@ -76,8 +107,9 @@ function Map() {
           />
           <Marker position={position}>
             <>
-              {noises.map((noise) => (
+              {noises.map((noise, index) => (
                 <Circle
+                  key={index}
                   center={[noise.latitude, noise.longitude]}
                   radius={noise.decibels * 100}
                   color="red"
