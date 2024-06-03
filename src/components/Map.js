@@ -34,24 +34,23 @@ function Map() {
   const [noises, setNoises] = useState([]);
 
   function createMqttClient() {
-    const mqttClient = mqtt.connect("mqtt://localhost");
+    const mqttClient = mqtt.connect("ws://localhost:8888", { keepalive: 75 });
     mqttClient.on("connect", () => {
-      alert("MQTT connected");
+      console.log("[MQTT] Connected");
       mqttClient.subscribe("noise/updates", (err) => {
-        console.log(`Error: ${err}`);
+        if (!err) {
+          console.log("[MQTT] Subscribed to noise/updates");
+        }
       });
     });
 
-    mqttClient.on("error", (err) => {
-      console.log(`MQTT error: ${err}`);
-    });
-
     mqttClient.on("message", (topic, message) => {
-      console.log(`Topic: ${topic}\nMessage: ${message.toString()}`);
+      console.log(`[MQTT] Topic: ${topic}, Message: ${message.toString()}`);
     });
 
     return () => {
       mqttClient.end();
+      console.log("[MQTT] Disconnected");
     };
   }
 
