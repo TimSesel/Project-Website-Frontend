@@ -2,9 +2,9 @@ name: Run tests for frontend
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
@@ -12,27 +12,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-  
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-  
+
       - name: Install dependencies
         run: npm install
-  
+
       # Checks syntax
       - name: Lint the code
         run: npm run lint
-  
+
       # Runs Jest test
       - name: Run tests
         run: npm test
-  
+
       # Builds project
       - name: Build the project
         run: npm run build
-  
+
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v2
         with:
