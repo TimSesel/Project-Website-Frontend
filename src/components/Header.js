@@ -12,7 +12,7 @@ import { UserContext } from "../userContext";
 function Header(props) {
   return (
     <header>
-      <Typography level="h1" sx={{ textAlign: "center", mb: "25px" }}>
+      <Typography level="h1" sx={{ color:'primary.100', textAlign: 'center', mb: '25px', mt: '25px' }}>
         {props.title}
       </Typography>
       <Box component="nav" aria-label={props.title} sx={{ flexGrow: 1 }}>
@@ -41,7 +41,7 @@ function Header(props) {
                       Profile
                     </ListItemButton>
                   </ListItem>
-                  <ListItem role="none" sx={{ marginInlineStart: "auto" }}>
+                  <ListItem role="none" sx={{ marginInlineStart: 'auto' }}>
                     <ListItemButton
                       role="menuitem"
                       component={Link}
@@ -53,7 +53,7 @@ function Header(props) {
                 </>
               ) : (
                 <>
-                  <ListItem role="none" sx={{ marginInlineStart: "auto" }}>
+                  <ListItem role="none" sx={{ marginInlineStart: 'auto' }}>
                     <ListItemButton
                       role="menuitem"
                       component={Link}
