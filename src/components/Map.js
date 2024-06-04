@@ -51,9 +51,9 @@ function Map() {
         if (
           typeof noise === "object" &&
           noise !== null &&
-          noise.hasOwnProperty("latitude") &&
-          noise.hasOwnProperty("longitude") &&
-          noise.hasOwnProperty("decibels")
+          noise?.hasOwnProperty("latitude") &&
+          noise?.hasOwnProperty("longitude") &&
+          noise?.hasOwnProperty("decibels")
         ) {
           setNoises((noises) => [...noises, noise]);
         } else {
