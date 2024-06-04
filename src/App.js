@@ -8,7 +8,7 @@ import Profile from "./components/Profile";
 import Logout from "./components/Logout";
 import Map from "./components/Map";
 import Box from '@mui/joy/Box';
-import { CssVarsProvider, ThemeProvider, useTheme, extendTheme } from '@mui/joy/styles';
+import { CssVarsProvider, ThemeProvider, extendTheme } from '@mui/joy/styles';
 
 function App() {
   const [user, setUser] = useState(localStorage.user ? JSON.parse(localStorage.user) : null);
