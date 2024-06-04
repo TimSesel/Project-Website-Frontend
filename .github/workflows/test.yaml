@@ -26,9 +26,9 @@ jobs:
         run: npm run lint
 
 
-      # Runs Jest test (NEEDS FIXING)
-      #- name: Run tests
-      #  run: npm test
+      # Runs Jest test
+      - name: Run tests
+        run: npm test
 
       # Builds project
       - name: Build the project
