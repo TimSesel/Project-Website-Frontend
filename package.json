@@ -29,6 +29,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\""
   },
+  "jest": {
+    "preset": "react-app"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
