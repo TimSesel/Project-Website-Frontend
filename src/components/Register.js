@@ -1,3 +1,4 @@
+import { backendIp } from "../globals";
 import { useContext, useState } from "react";
 import { UserContext } from "../userContext";
 import { Navigate } from "react-router-dom";
@@ -17,7 +18,7 @@ function Register() {
   // BEWARE: Might have to tweak route and or address
   async function register(e){
     e.preventDefault();
-    const res = await fetch("http://localhost:3001/users", {
+    const res = await fetch(`http://${backendIp}:3001/users`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

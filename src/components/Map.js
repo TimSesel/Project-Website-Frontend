@@ -1,3 +1,4 @@
+import { backendIp } from "../globals";
 import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
@@ -34,7 +35,7 @@ function Map() {
   const [noises, setNoises] = useState([]);
 
   function createMqttClient() {
-    const mqttClient = mqtt.connect("ws://localhost:8888", { keepalive: 75 });
+    const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, { keepalive: 75 });
     mqttClient.on("connect", () => {
       console.log("[MQTT] Connected");
       mqttClient.subscribe("noise/updates", (err) => {
@@ -81,7 +82,7 @@ function Map() {
   }
 
   async function getNoises() {
-    const res = await fetch("http://localhost:3001/datas", {
+    const res = await fetch(`http://${backendIp}:3001/datas`, {
       method: "GET",
     });
     const data = await res.json();
