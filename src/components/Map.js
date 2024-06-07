@@ -3,6 +3,10 @@ import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
+//import Tabs from '@mui/joy/Tabs';
+//import TabList from '@mui/joy/TabList';
+//import Tab, { tabClasses } from '@mui/joy/Tab';
+//import TabPanel from '@mui/joy/TabPanel';
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -128,47 +132,62 @@ export default Map;
 
 /*
 
-import * as React from 'react';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
-
-function Map(){
-  return (
-    <Tabs aria-label="Dates" defaultValue={0} sx={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
-      <TabList sx={{
-        p: 1,
-        justifyContent: 'center',
-        [`&& .${tabClasses.root}`]: {
-          flex: 'initial',
-          bgcolor: 'transparent', '&:hover': {bgcolor: 'background.level1',},
-          [`&.${tabClasses.selected}`]: {
-            color: 'primary.100', '&::after': {
-              height: 2,
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16,
-              bgcolor: 'primary.100',
-            },
+<div>
+  <Tabs aria-label="Dates" defaultValue={0} sx={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
+    <TabList sx={{
+      p: 1,
+      justifyContent: 'center',
+      [`&& .${tabClasses.root}`]: {
+        flex: 'initial',
+        bgcolor: 'transparent', '&:hover': {bgcolor: 'background.level1',},
+        [`&.${tabClasses.selected}`]: {
+          color: 'primary.100', '&::after': {
+            height: 2,
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            bgcolor: 'primary.100',
           },
         },
-      }}
-      >
-        <Tab>First tab</Tab>
-        <Tab>Second tab</Tab>
-        <Tab>Third tab</Tab>
-      </TabList>
-      <TabPanel value={0} sx={{width: '100%'}}>
-        <b>First</b> tab panel
-      </TabPanel>
-      <TabPanel value={1}>
-        <b>Second</b> tab panel
-      </TabPanel>
-      <TabPanel value={2}>
-        <b>Third</b> tab panel
-      </TabPanel>
-    </Tabs>
-  );
-}
+      },
+    }}
+    >
+      {noises.map(noise=>(<Tab>{noise.date}</Tab>))}
+    </TabList>
+      {noises.map(noise=>(<Tab>
+        <VStack spacing={4}>
+          <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+            <MapPositionSetter position={position} />
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={position}>
+              <>
+                {noises.map((noise, index) => (
+                  <Circle
+                    key={index}
+                    center={[noise.latitude, noise.longitude]}
+                    radius={noise.decibels * 100}
+                    color="red"
+                    fillColor="red"
+                  />
+                ))}
+              </>
+            </Marker>
+          </MapContainer>
+        </VStack>
+      </Tab>))}
+    <TabPanel value={0} sx={{width: '100%'}}>
+      <b>First</b> tab panel
+    </TabPanel>
+    <TabPanel value={1}>
+      <b>Second</b> tab panel
+    </TabPanel>
+    <TabPanel value={2}>
+      <b>Third</b> tab panel
+    </TabPanel>
+  </Tabs>
+  
+</div>
 
 */

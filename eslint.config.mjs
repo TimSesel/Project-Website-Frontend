@@ -14,7 +14,7 @@ export default [
   pluginReactConfig,
   {
     plugins: {
-      jest: pluginObject
+      jest: jestPlugin
     }
   },
   {
