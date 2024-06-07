@@ -12,7 +12,11 @@ export default [
   },
   pluginJs.configs.recommended,
   pluginReactConfig,
-  jestPlugin.configs.recommended,
+  {
+    plugins: {
+      jest: pluginObject
+    }
+  },
   {
     settings: {
       react: {
