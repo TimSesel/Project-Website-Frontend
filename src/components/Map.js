@@ -39,7 +39,9 @@ function Map() {
   const [noises, setNoises] = useState([]);
 
   function createMqttClient() {
-    const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, { keepalive: 75 });
+    const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, {
+      keepalive: 75,
+    });
     mqttClient.on("connect", () => {
       console.log("[MQTT] Connected");
       mqttClient.subscribe("noise/updates", (err) => {
@@ -59,7 +61,7 @@ function Map() {
           Object.prototype.hasOwnProperty.call(noise, "latitude") &&
           Object.prototype.hasOwnProperty.call(noise, "longitude") &&
           Object.prototype.hasOwnProperty.call(noise, "decibels") &&
-          Object.prototype.hasOwnProperty.call(noise, "radius") && 
+          Object.prototype.hasOwnProperty.call(noise, "radius") &&
           Object.prototype.hasOwnProperty.call(noise, "id")
         ) {
           setNoises((noises) => [...noises, noise]);
@@ -79,11 +81,23 @@ function Map() {
 
   function getCurrentPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (pos) {
-        setPosition([pos.coords.latitude, pos.coords.longitude]);
-      });
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition([pos.coords.latitude, pos.coords.longitude]);
+        },
+        async (_err) => {
+          try {
+            const res = await fetch("http://ip-api.com/json");
+            const pos = await res.json();
+            console.log(pos);
+            setPosition([pos.lat, pos.lon]);
+          } catch (e) {
+            console.error(e);
+          }
+        },
+      );
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      console.error("Geolocation is not supported by this browser.");
     }
   }
 
@@ -130,7 +144,7 @@ function Map() {
                 <Circle
                   key={index}
                   center={[noise.latitude, noise.longitude]}
-                  // Conversion rate from degrees to meters 
+                  // Conversion rate from degrees to meters
                   // (longitude has different rates depending on geolocation, might need to change)
                   radius={noise.radius * 111320}
                   color={getColor(noise.decibels)}

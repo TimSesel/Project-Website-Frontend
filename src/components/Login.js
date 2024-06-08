@@ -49,33 +49,33 @@ function Login() {
   }
   */
 
-  const sendVerificationCode = () => {
-    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      'size': 'invisible',
-      'callback': (response) => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-      }
-    }, auth);
-
-    signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
-      .then((confirmationResult) => {
-        setVerificationId(confirmationResult.verificationId);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
-
-  const verifyCode = () => {
-    const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-    signInWithCredential(auth, credential)
-      .then((result) => {
-        userContext.setUserContext(result.user);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  };
+  // const sendVerificationCode = () => {
+  //   const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+  //     'size': 'invisible',
+  //     'callback': (response) => {
+  //       // reCAPTCHA solved, allow signInWithPhoneNumber.
+  //     }
+  //   }, auth);
+  //
+  //   signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
+  //     .then((confirmationResult) => {
+  //       setVerificationId(confirmationResult.verificationId);
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message);
+  //     });
+  // };
+  //
+  // const verifyCode = () => {
+  //   const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+  //   signInWithCredential(auth, credential)
+  //     .then((result) => {
+  //       userContext.setUserContext(result.user);
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message);
+  //     });
+  // };
 
   return (
     <Card sx={{ p: 5 }}>
@@ -108,10 +108,11 @@ function Login() {
             value={phoneNumber}
             onChange={(e) => (setPhoneNumber(e.target.value))}
             sx={{ mb: 2 }}
-          />
+          />/*
           <Button onClick={sendVerificationCode} sx={{ mb: 2 }}>
             Send Verification Code
           </Button>
+      */
           <Input
             type="text"
             name="verificationCode"
