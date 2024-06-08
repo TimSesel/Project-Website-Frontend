@@ -89,8 +89,9 @@ function Map() {
           try {
             const res = await fetch("http://ip-api.com/json");
             const pos = await res.json();
-            console.log(pos);
-            setPosition([pos.lat, pos.lon]);
+            if ("lat" in pos && "lon" in pos) {
+              setPosition([pos.lat, pos.lon]);
+            }
           } catch (e) {
             console.error(e);
           }
