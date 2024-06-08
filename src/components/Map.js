@@ -87,6 +87,18 @@ function Map() {
     }
   }
 
+  function getColor(decibels) {
+    if (decibels != null) {
+      if (decibels <= 50) {
+        return "Green";
+      } else if (50 < decibels && decibels <= 80) {
+        return "Yellow";
+      } else {
+        return "Red";
+      }
+    }
+  }
+
   async function getNoises() {
     const res = await fetch(`http://${backendIp}:3001/datas`, {
       method: "GET",
@@ -118,9 +130,11 @@ function Map() {
                 <Circle
                   key={index}
                   center={[noise.latitude, noise.longitude]}
-                  radius={noise.decibels * 100}
-                  color="red"
-                  fillColor="red"
+                  // Conversion rate from degrees to meters 
+                  // (longitude has different rates depending on geolocation, might need to change)
+                  radius={noise.radius * 111320}
+                  color={getColor(noise.decibels)}
+                  fillColor={getColor(noise.decibels)}
                 />
               ))}
             </>
