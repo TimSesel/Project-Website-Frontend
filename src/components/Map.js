@@ -3,10 +3,10 @@ import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
-//import Tabs from '@mui/joy/Tabs';
-//import TabList from '@mui/joy/TabList';
-//import Tab, { tabClasses } from '@mui/joy/Tab';
-//import TabPanel from '@mui/joy/TabPanel';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab, { tabClasses } from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -36,7 +36,8 @@ function MapPositionSetter({ position }) {
 
 function Map() {
   const [position, setPosition] = useState([0, 0]);
-  const [noises, setNoises] = useState([]);
+  //const [noises, setNoises] = useState([]);
+  const [dates, setDates] = useState([]);
 
   function createMqttClient() {
     const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, {
@@ -114,6 +115,7 @@ function Map() {
     }
   }
 
+  /*
   async function getNoises() {
     const res = await fetch(`http://${backendIp}:3001/datas`, {
       method: "GET",
@@ -123,43 +125,112 @@ function Map() {
       setNoises(data);
     }
   }
+  */
+
+  async function getDates() {
+    const res = await fetch(`http://${backendIp}:3001/datas/dates`, {
+      method: "GET",
+    });
+    const data = await res.json();
+    if (data) {
+      setDates(data);
+    }
+  }
 
   useEffect(() => {
     getCurrentPosition();
     getNoises();
+    getDates();
     return createMqttClient();
   }, []);
 
   return (
     <div>
-      <VStack spacing={4}>
-        <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
-          <MapPositionSetter position={position} />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Marker position={position}>
-            <>
-              {noises.map((noise, index) => (
-                <Circle
-                  key={index}
-                  center={[noise.latitude, noise.longitude]}
-                  // Conversion rate from degrees to meters
-                  // (longitude has different rates depending on geolocation, might need to change)
-                  radius={noise.radius * 111320}
-                  color={getColor(noise.decibels)}
-                  fillColor={getColor(noise.decibels)}
-                />
-              ))}
-            </>
-          </Marker>
-        </MapContainer>
-      </VStack>
+      <Tabs aria-label="Dates" defaultValue={0} sx={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
+        <TabList sx={{
+          p: 1,
+          justifyContent: 'center',
+          [`&& .${tabClasses.root}`]: {
+            flex: 'initial',
+            bgcolor: 'transparent', '&:hover': {bgcolor: 'background.level1',},
+            [`&.${tabClasses.selected}`]: {
+              color: 'primary.100', '&::after': {
+                height: 2,
+                borderTopLeftRadius: 16,
+                borderTopRightRadius: 16,
+                bgcolor: 'primary.100',
+              },
+            },
+          },
+        }}
+        >
+          {dates.map((date, index)=>(<Tab>{new Date(date.date).toDateString()}</Tab>))}
+        </TabList>
+        {dates.map((date, index)=>(<TabPanel value={index}>
+          <VStack spacing={4}>
+            <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+              <MapPositionSetter position={position} />
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={position}>
+                <>
+                  {date.data.map((noise, innerIndex) => (
+                    <Circle
+                      key={innerIndex}
+                      center={[noise.latitude, noise.longitude]}
+                      // Conversion rate from degrees to meters
+                      // (longitude has different rates depending on geolocation, might need to change)
+                      radius={noise.radius * 111320}
+                      color={getColor(noise.decibels)}
+                      fillColor={getColor(noise.decibels)}
+                    />
+                  ))}
+                </>
+              </Marker>
+            </MapContainer>
+          </VStack>
+        </TabPanel>))}
+      </Tabs>
+                  
     </div>
   );
 }
 export default Map;
+
+
+/*
+
+<div>
+  <VStack spacing={4}>
+    <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+      <MapPositionSetter position={position} />
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={position}>
+        <>
+          {noises.map((noise, index) => (
+            <Circle
+              key={index}
+              center={[noise.latitude, noise.longitude]}
+              // Conversion rate from degrees to meters
+              // (longitude has different rates depending on geolocation, might need to change)
+              radius={noise.radius * 111320}
+              color={getColor(noise.decibels)}
+              fillColor={getColor(noise.decibels)}
+            />
+          ))}
+        </>
+      </Marker>
+    </MapContainer>
+  </VStack>
+</div>
+
+*/
+
 
 /*
 
