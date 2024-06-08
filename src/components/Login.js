@@ -7,10 +7,15 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
+import { auth , signInWithPhoneNumber } from "../firebase";
+import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationId, setVerificationId] = useState("");
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
@@ -44,6 +49,28 @@ function Login() {
   }
   */
 
+  const sendVerificationCode = () => {
+    signInWithPhoneNumber(auth, phoneNumber)
+      .then((confirmationResult) => {
+        setVerificationId(confirmationResult.verificationId);
+      })
+      .catch((error) => {
+        console.log(phoneNumber);
+        setError(error.message);
+      });
+  };
+
+  const verifyCode = () => {
+    const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
+    signInWithCredential(auth, credential)
+      .then((result) => {
+        userContext.setUserContext(result.user);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
   return (
     <Card sx={{ p: 5 }}>
       <Typography level="h2" sx={{ color:'primary.100', textAlign: 'center' }}>
@@ -66,8 +93,30 @@ function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => (setPassword(e.target.value))}
+            sx={{ mb: 2 }}
           />
-          <hr/>
+          <Input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={(e) => (setPhoneNumber(e.target.value))}
+            sx={{ mb: 2 }}
+          />
+          <Button onClick={sendVerificationCode} sx={{ mb: 2 }}>
+            Send Verification Code
+          </Button>
+          <Input
+            type="text"
+            name="verificationCode"
+            placeholder="Verification Code"
+            value={verificationCode}
+            onChange={(e) => (setVerificationCode(e.target.value))}
+            sx={{ mb: 2 }}
+          />
+          <Button onClick={verifyCode} sx={{ mb: 2 }}>
+            Verify Code
+          </Button>
           <Typography level="body-md" sx={{ color:'danger.400', textAlign: 'center', m: 2 }}>
             {error}
           </Typography>
