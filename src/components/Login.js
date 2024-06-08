@@ -7,7 +7,7 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
-import { auth , signInWithPhoneNumber } from "../firebase";
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 function Login() {
@@ -50,12 +50,18 @@ function Login() {
   */
 
   const sendVerificationCode = () => {
-    signInWithPhoneNumber(auth, phoneNumber)
+    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+      }
+    }, auth);
+
+    signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
       .then((confirmationResult) => {
         setVerificationId(confirmationResult.verificationId);
       })
       .catch((error) => {
-        console.log(phoneNumber);
         setError(error.message);
       });
   };
@@ -125,6 +131,7 @@ function Login() {
           </Button>
         </form>
       </CardContent>
+      <div id="recaptcha-container"></div>
     </Card>
   );
 }
