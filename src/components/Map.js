@@ -58,7 +58,9 @@ function Map() {
           noise !== null &&
           Object.prototype.hasOwnProperty.call(noise, "latitude") &&
           Object.prototype.hasOwnProperty.call(noise, "longitude") &&
-          Object.prototype.hasOwnProperty.call(noise, "decibels")
+          Object.prototype.hasOwnProperty.call(noise, "decibels") &&
+          Object.prototype.hasOwnProperty.call(noise, "radius") && 
+          Object.prototype.hasOwnProperty.call(noise, "id")
         ) {
           setNoises((noises) => [...noises, noise]);
         } else {
