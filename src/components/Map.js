@@ -65,7 +65,7 @@ function Map() {
           Object.prototype.hasOwnProperty.call(noise, "radius") &&
           Object.prototype.hasOwnProperty.call(noise, "id")
         ) {
-          setNoises((noises) => [...noises, noise]);
+          //setNoises((noises) => [...noises, noise]);
         } else {
           throw new Error("Invalid noise format");
         }
@@ -139,7 +139,7 @@ function Map() {
 
   useEffect(() => {
     getCurrentPosition();
-    getNoises();
+    // getNoises();
     getDates();
     return createMqttClient();
   }, []);
