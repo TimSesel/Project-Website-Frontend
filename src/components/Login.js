@@ -7,15 +7,11 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase";
-import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [verificationId, setVerificationId] = useState("");
   const [error, setError] = useState("");
   const userContext = useContext(UserContext);
 
@@ -108,31 +104,12 @@ function Login() {
             value={phoneNumber}
             onChange={(e) => (setPhoneNumber(e.target.value))}
             sx={{ mb: 2 }}
-          />/*
-          <Button onClick={sendVerificationCode} sx={{ mb: 2 }}>
-            Send Verification Code
-          </Button>
-      */
-          <Input
-            type="text"
-            name="verificationCode"
-            placeholder="Verification Code"
-            value={verificationCode}
-            onChange={(e) => (setVerificationCode(e.target.value))}
-            sx={{ mb: 2 }}
           />
-          <Button onClick={verifyCode} sx={{ mb: 2 }}>
-            Verify Code
-          </Button>
-          <Typography level="body-md" sx={{ color:'danger.400', textAlign: 'center', m: 2 }}>
-            {error}
-          </Typography>
           <Button type="submit" size="md" fontSize="lg">
             Log in
           </Button>
         </form>
       </CardContent>
-      <div id="recaptcha-container"></div>
     </Card>
   );
 }
