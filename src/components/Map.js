@@ -3,10 +3,10 @@ import { useMap, MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState, useEffect } from "react";
 import VStack from "@mui/joy/Stack";
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
+import Tabs from "@mui/joy/Tabs";
+import TabList from "@mui/joy/TabList";
+import Tab, { tabClasses } from "@mui/joy/Tab";
+import TabPanel from "@mui/joy/TabPanel";
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -62,10 +62,14 @@ function Map() {
           Object.prototype.hasOwnProperty.call(noise, "latitude") &&
           Object.prototype.hasOwnProperty.call(noise, "longitude") &&
           Object.prototype.hasOwnProperty.call(noise, "decibels") &&
-          Object.prototype.hasOwnProperty.call(noise, "radius") &&
-          Object.prototype.hasOwnProperty.call(noise, "id")
+          Object.prototype.hasOwnProperty.call(noise, "radius")
         ) {
-          //setNoises((noises) => [...noises, noise]);
+          // setNoises((noises) => [...noises, noise]);
+          const lastDates = dates[dates.length - 1];
+          setDates((dates) => [
+            ...dates.slice(0, dates.length - 1),
+            { ...lastDates, data: [...lastDates.data, noise] },
+          ]);
         } else {
           throw new Error("Invalid noise format");
         }
@@ -146,59 +150,68 @@ function Map() {
 
   return (
     <div>
-      <Tabs aria-label="Dates" defaultValue={0} sx={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
-        <TabList sx={{
-          p: 1,
-          justifyContent: 'center',
-          [`&& .${tabClasses.root}`]: {
-            flex: 'initial',
-            bgcolor: 'transparent', '&:hover': {bgcolor: 'background.level1',},
-            [`&.${tabClasses.selected}`]: {
-              color: 'primary.100', '&::after': {
-                height: 2,
-                borderTopLeftRadius: 16,
-                borderTopRightRadius: 16,
-                bgcolor: 'primary.100',
+      <Tabs
+        aria-label="Dates"
+        defaultValue={0}
+        sx={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}
+      >
+        <TabList
+          sx={{
+            p: 1,
+            justifyContent: "center",
+            [`&& .${tabClasses.root}`]: {
+              flex: "initial",
+              bgcolor: "transparent",
+              "&:hover": { bgcolor: "background.level1" },
+              [`&.${tabClasses.selected}`]: {
+                color: "primary.100",
+                "&::after": {
+                  height: 2,
+                  borderTopLeftRadius: 16,
+                  borderTopRightRadius: 16,
+                  bgcolor: "primary.100",
+                },
               },
             },
-          },
-        }}
+          }}
         >
-          {dates.map((date, index)=>(<Tab>{new Date(date.date).toDateString()}</Tab>))}
+          {dates.map((date, index) => (
+            <Tab key={index}>{new Date(date.date).toDateString()}</Tab>
+          ))}
         </TabList>
-        {dates.map((date, index)=>(<TabPanel value={index}>
-          <VStack spacing={4}>
-            <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
-              <MapPositionSetter position={position} />
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <>
-                  {date.data.map((noise, innerIndex) => (
-                    <Circle
-                      key={innerIndex}
-                      center={[noise.latitude, noise.longitude]}
-                      // Conversion rate from degrees to meters
-                      // (longitude has different rates depending on geolocation, might need to change)
-                      radius={noise.radius * 111320}
-                      color={getColor(noise.decibels)}
-                      fillColor={getColor(noise.decibels)}
-                    />
-                  ))}
-                </>
-              </Marker>
-            </MapContainer>
-          </VStack>
-        </TabPanel>))}
+        {dates.map((date, index) => (
+          <TabPanel key={index} value={index}>
+            <VStack spacing={4}>
+              <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+                <MapPositionSetter position={position} />
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={position}>
+                  <>
+                    {date.data.map((noise, innerIndex) => (
+                      <Circle
+                        key={innerIndex}
+                        center={[noise.latitude, noise.longitude]}
+                        // Conversion rate from degrees to meters
+                        // (longitude has different rates depending on geolocation, might need to change)
+                        radius={noise.radius * 111320}
+                        color={getColor(noise.decibels)}
+                        fillColor={getColor(noise.decibels)}
+                      />
+                    ))}
+                  </>
+                </Marker>
+              </MapContainer>
+            </VStack>
+          </TabPanel>
+        ))}
       </Tabs>
-                  
     </div>
   );
 }
 export default Map;
-
 
 /*
 
@@ -230,7 +243,6 @@ export default Map;
 </div>
 
 */
-
 
 /*
 
