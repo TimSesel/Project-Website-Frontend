@@ -3,8 +3,9 @@ import { UserContext } from "../userContext";
 import { NoiseContext } from '../noiseContext';
 import Typography from "@mui/joy/Typography";
 import Card from "@mui/joy/Card";
+import Box from "@mui/joy/Box";
 import CardContent from "@mui/joy/CardContent";
-// import Button from "@mui/joy/Button";
+import DecibelChart from "./DecibelChart";
 
 function Profile(){
     const userContext = useContext(UserContext);
@@ -12,6 +13,9 @@ function Profile(){
     const noiseContext = useContext(NoiseContext);
     const { noiseData, setNoiseData } = noiseContext;
 
+    // Filter the noise data for the current user
+    const userNoiseData = noiseData.flatMap(noise => noise.data.filter(data => data.userId === user._id));
+    console.log(userNoiseData);
     return (
         <Card>
             <Typography level="h3">
@@ -24,22 +28,16 @@ function Profile(){
                 <Typography level="body2">
                     Email: {user.email}
                 </Typography>
+                {/*}
                 <Typography level="body2">
                     Noise data lenght: {noiseData.length}
                 </Typography>
-                {noiseData.map((noise, index) => (
-                    <>
-                        <Typography key={index} level="body2">
-                            Noise {index + 1}:
-                        </Typography>
-                        {noise.data.filter(data => data.userId === user._id).map((data, dataIndex) => (
-                        //{noise.data.map((data, dataIndex) => (
-                            <Typography key={dataIndex} level="body2">
-                                Data {dataIndex + 1}: {JSON.stringify(data)}
-                            </Typography>
-                        ))}
-                    </>
-                ))}
+                {*/}
+                {userNoiseData.length > 0 ? (
+                    <Box sx={{pl:'15%', pr:'15%'}}><DecibelChart data={userNoiseData} /></Box>
+                ) : (
+                    <Typography level="body2">No noise data available for this user.</Typography>
+                )}
             </CardContent>
         </Card>
     );
