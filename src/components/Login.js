@@ -34,6 +34,7 @@ function Login() {
       setUsername("");
       setPassword("");
       setError("Invalid username or password");
+      window.alert("Invalid username or password");
     }
   }
 
@@ -95,14 +96,6 @@ function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => (setPassword(e.target.value))}
-            sx={{ mb: 2 }}
-          />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => (setPhoneNumber(e.target.value))}
             sx={{ mb: 2 }}
           />
           <Button type="submit" size="md" fontSize="lg">

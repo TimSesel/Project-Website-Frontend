@@ -7,6 +7,10 @@ import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
+import { UserContext } from '../userContext.js';
+import { NoiseContext } from '../noiseContext.js';
+import { useContext } from 'react';
+import { Popup } from 'react-leaflet';
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -39,6 +43,10 @@ function Map() {
   //const [noises, setNoises] = useState([]);
   const [dates, setDates] = useState([]);
 
+  const { setNoiseData } = useContext(NoiseContext); // save noise data to display it on profile
+  const userContext = useContext(UserContext);
+  const { user } = userContext;
+
   function createMqttClient() {
     const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, {
       keepalive: 75,
@@ -55,7 +63,7 @@ function Map() {
     mqttClient.on("message", (topic, message) => {
       console.log(`[MQTT] Topic: ${topic}, Message: ${message.toString()}`);
       try {
-        let noise = JSON.parse(message.toString());
+        let noise = {...JSON.parse(message.toString()), userId: user.id};
         if (
           typeof noise === "object" &&
           noise !== null &&
@@ -70,6 +78,7 @@ function Map() {
             ...dates.slice(0, dates.length - 1),
             { ...lastDates, data: [...lastDates.data, noise] },
           ]);
+          setNoiseData(dates);
         } else {
           throw new Error("Invalid noise format");
         }
@@ -138,6 +147,7 @@ function Map() {
     const data = await res.json();
     if (data) {
       setDates(data);
+      setNoiseData(data);
     }
   }
 
@@ -189,19 +199,43 @@ function Map() {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <Marker position={position}>
-                  <>
-                    {date.data.map((noise, innerIndex) => (
-                      <Circle
-                        key={innerIndex}
-                        center={[noise.latitude, noise.longitude]}
-                        // Conversion rate from degrees to meters
-                        // (longitude has different rates depending on geolocation, might need to change)
-                        radius={noise.radius * 111320}
-                        color={getColor(noise.decibels)}
-                        fillColor={getColor(noise.decibels)}
-                      />
-                    ))}
-                  </>
+                  <UserContext.Consumer>
+                    {(context) =>
+                      context.user ? (
+                        <>
+                          {date.data.map((noise, innerIndex) => (
+                            <Circle
+                              key={innerIndex}
+                              center={[noise.latitude, noise.longitude]}
+                              // Conversion rate from degrees to meters
+                              // (longitude has different rates depending on geolocation, might need to change)
+                              radius={noise.radius * 111320}
+                              color={getColor(noise.decibels)}
+                              fillColor={getColor(noise.decibels)}
+                            >
+                              <Popup>
+                                {noise.userId}
+                              </Popup>
+                            </Circle>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {date.data.map((noise, innerIndex) => (
+                            <Circle
+                              key={innerIndex}
+                              center={[noise.latitude, noise.longitude]}
+                              // Conversion rate from degrees to meters
+                              // (longitude has different rates depending on geolocation, might need to change)
+                              radius={noise.radius * 111320}
+                              color={getColor(noise.decibels)}
+                              fillColor={getColor(noise.decibels)}
+                            />
+                          ))}
+                        </>
+                      )
+                    }
+                  </UserContext.Consumer>
                 </Marker>
               </MapContainer>
             </VStack>

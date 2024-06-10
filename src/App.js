@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserContext } from "./userContext";
+import { NoiseContext } from "./noiseContext";
 import Header from "./components/Header";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -16,6 +17,7 @@ function App() {
     localStorage.setItem("user", JSON.stringify(userInfo));
     setUser(userInfo);
   }
+  const [noiseData, setNoiseData] = useState([]);
 
   const theme = extendTheme({
     colorSchemes: {
@@ -46,18 +48,23 @@ function App() {
             user: user,
             setUserContext: updateUserData
           }}>
-            <div className='App'>
-              <Header title="NOISE POLLUTION"></Header>
-              <Box component="section" sx={{ m: '2%', p: 2, bgcolor: 'background.level1', borderRadius: 16 }}>
-                <Routes>
-                  <Route path="/" exact element={<Map />}></Route>
-                  <Route path="/login" exact element={<Login />}></Route>
-                  <Route path="/register" element={<Register />}></Route>
-                  <Route path="/profile" element={<Profile />}></Route>
-                  <Route path="/logout" element={<Logout />}></Route>
-                </Routes>
-              </Box>
-            </div>
+            <NoiseContext.Provider value={{
+              noiseData: noiseData,
+              setNoiseData: setNoiseData
+            }}>
+              <div className='App'>
+                <Header title="NOISE POLLUTION"></Header>
+                <Box component="section" sx={{ m: '2%', p: 2, bgcolor: 'background.level1', borderRadius: 16 }}>
+                  <Routes>
+                    <Route path="/" exact element={<Map />}></Route>
+                    <Route path="/login" exact element={<Login />}></Route>
+                    <Route path="/register" element={<Register />}></Route>
+                    <Route path="/profile" element={<Profile />}></Route>
+                    <Route path="/logout" element={<Logout />}></Route>
+                  </Routes>
+                </Box>
+              </div>
+            </NoiseContext.Provider>
           </UserContext.Provider>
         </BrowserRouter>
       </CssVarsProvider>
