@@ -97,14 +97,6 @@ function Login() {
             onChange={(e) => (setPassword(e.target.value))}
             sx={{ mb: 2 }}
           />
-          <Input
-            type="text"
-            name="phone"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={(e) => (setPhoneNumber(e.target.value))}
-            sx={{ mb: 2 }}
-          />
           <Button type="submit" size="md" fontSize="lg">
             Log in
           </Button>
