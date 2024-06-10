@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserContext } from "./userContext";
-import { noiseContext } from "./noiseContext";
+import { NoiseContext } from "./noiseContext";
 import Header from "./components/Header";
 import Login from "./components/Login";
 import Register from "./components/Register";
