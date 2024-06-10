@@ -4,15 +4,15 @@ import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement
 
 ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
-const DecibelChart = ({ data }) => {
+const RadiusChart = ({ data }) => {
     const chartData = {
         labels: data.map((entry, index) => `Data ${index + 1}`),
         datasets: [
             {
-                label: 'Decibel Levels',
-                data: data.map(entry => entry.decibels),
+                label: 'Radius of each recording',
+                data: data.map(entry => entry.radius),
                 borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: '#7B1FA2',
+                backgroundColor: '#AB47BC',
                 fill: false,
             },
         ],
@@ -27,7 +27,7 @@ const DecibelChart = ({ data }) => {
             },
             title: {
                 display: true,
-                text: 'User Decibel Levels',
+                text: 'User Radius Sizes',
             },
         },
     };
@@ -35,4 +35,4 @@ const DecibelChart = ({ data }) => {
     return <Bar data={chartData} options={options} />;
 };
 
-export default DecibelChart;
+export default RadiusChart;

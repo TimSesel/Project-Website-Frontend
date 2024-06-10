@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/joy/Box";
 import Home from "@mui/icons-material/Home";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import List from "@mui/joy/List";
 import ListDivider from "@mui/joy/ListDivider";
 import ListItem from "@mui/joy/ListItem";
@@ -38,7 +39,7 @@ function Header(props) {
                       component={Link}
                       to="/profile"
                     >
-                      Profile
+                      <AccountCircle />
                     </ListItemButton>
                   </ListItem>
                   <ListItem role="none" sx={{ marginInlineStart: 'auto' }}>

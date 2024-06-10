@@ -6,6 +6,7 @@ import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
 import CardContent from "@mui/joy/CardContent";
 import DecibelChart from "./DecibelChart";
+import PieChart from "./PieChart";
 
 function Profile(){
     const userContext = useContext(UserContext);
@@ -34,7 +35,10 @@ function Profile(){
                 </Typography>
                 {*/}
                 {userNoiseData.length > 0 ? (
-                    <Box sx={{pl:'15%', pr:'15%'}}><DecibelChart data={userNoiseData} /></Box>
+                    <Card>
+                        <Box sx={{pl:'15%', pr:'15%'}}><DecibelChart data={userNoiseData} /></Box>
+                        <Box sx={{pl:'15%', pr:'15%'}}><PieChart data={userNoiseData} /></Box>
+                    </Card>
                 ) : (
                     <Typography level="body2">No noise data available for this user.</Typography>
                 )}
