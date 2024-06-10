@@ -72,13 +72,15 @@ function Map() {
           Object.prototype.hasOwnProperty.call(noise, "decibels") &&
           Object.prototype.hasOwnProperty.call(noise, "radius")
         ) {
-          // setNoises((noises) => [...noises, noise]);
-          const lastDates = dates[dates.length - 1];
-          setDates((dates) => [
-            ...dates.slice(0, dates.length - 1),
-            { ...lastDates, data: [...lastDates.data, noise] },
-          ]);
-          setNoiseData(dates);
+          setDates((prevDates) => {
+            const lastDates = prevDates[prevDates.length - 1];
+            const newDates = [
+              ...prevDates.slice(0, prevDates.length - 1),
+              { ...lastDates, data: [...lastDates.data, noise] },
+            ];
+            setNoiseData(newDates);
+            return newDates;
+          });
         } else {
           throw new Error("Invalid noise format");
         }
