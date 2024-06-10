@@ -27,6 +27,19 @@ function Profile(){
                 <Typography level="body2">
                     Noise data lenght: {noiseData.length}
                 </Typography>
+                {noiseData.map((noise, index) => (
+                    <>
+                        <Typography key={index} level="body2">
+                            Noise {index + 1}:
+                        </Typography>
+                        {noise.data.filter(data => data.userId === user._id).map((data, dataIndex) => (
+                        //{noise.data.map((data, dataIndex) => (
+                            <Typography key={dataIndex} level="body2">
+                                Data {dataIndex + 1}: {JSON.stringify(data)}
+                            </Typography>
+                        ))}
+                    </>
+                ))}
             </CardContent>
         </Card>
     );

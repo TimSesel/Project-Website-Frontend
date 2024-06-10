@@ -7,6 +7,9 @@ import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import TabPanel from "@mui/joy/TabPanel";
+import { UserContext } from '../userContext.js';
+import { NoiseContext } from '../noiseContext.js';
+import { useContext } from 'react';
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -39,6 +42,10 @@ function Map() {
   //const [noises, setNoises] = useState([]);
   const [dates, setDates] = useState([]);
 
+  const { setNoiseData } = useContext(NoiseContext); // save noise data to display it on profile
+  const userContext = useContext(UserContext);
+  const { user } = userContext;
+
   function createMqttClient() {
     const mqttClient = mqtt.connect(`ws://${backendIp}:8888`, {
       keepalive: 75,
@@ -55,7 +62,7 @@ function Map() {
     mqttClient.on("message", (topic, message) => {
       console.log(`[MQTT] Topic: ${topic}, Message: ${message.toString()}`);
       try {
-        let noise = JSON.parse(message.toString());
+        let noise = {...JSON.parse(message.toString()), userId: user.id};
         if (
           typeof noise === "object" &&
           noise !== null &&
@@ -70,6 +77,7 @@ function Map() {
             ...dates.slice(0, dates.length - 1),
             { ...lastDates, data: [...lastDates.data, noise] },
           ]);
+          setNoiseData(dates);
         } else {
           throw new Error("Invalid noise format");
         }
@@ -138,6 +146,7 @@ function Map() {
     const data = await res.json();
     if (data) {
       setDates(data);
+      setNoiseData(data);
     }
   }
 
