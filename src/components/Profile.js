@@ -13,7 +13,7 @@ function Profile(){
     const userContext = useContext(UserContext);
     const { user } = userContext;
     const noiseContext = useContext(NoiseContext);
-    const { noiseData, setNoiseData } = noiseContext;
+    const { noiseData} = noiseContext;
 
     // Filter the noise data for the current user
     const userNoiseData = noiseData.flatMap(noise => noise.data.filter(data => data.userId === user._id));
@@ -39,7 +39,7 @@ function Profile(){
                     <Card>
                         <Box sx={{pl:'15%', pr:'15%'}}><DecibelChart data={userNoiseData} /></Box>
                         <Box sx={{pl:'15%', pr:'15%'}}><RadiusChart data={userNoiseData} /></Box>
-                        <Box sx={{pl:'15%', pr:'15%'}}><PieChart data={userNoiseData} /></Box>
+                        <Box sx={{pl:'25%', pr:'25%'}}><PieChart data={userNoiseData} /></Box>
                     </Card>
                 ) : (
                     <Typography level="body2">No noise data available for this user.</Typography>

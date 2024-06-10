@@ -10,6 +10,7 @@ import TabPanel from "@mui/joy/TabPanel";
 import { UserContext } from '../userContext.js';
 import { NoiseContext } from '../noiseContext.js';
 import { useContext } from 'react';
+import { Popup } from 'react-leaflet';
 
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -198,19 +199,43 @@ function Map() {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <Marker position={position}>
-                  <>
-                    {date.data.map((noise, innerIndex) => (
-                      <Circle
-                        key={innerIndex}
-                        center={[noise.latitude, noise.longitude]}
-                        // Conversion rate from degrees to meters
-                        // (longitude has different rates depending on geolocation, might need to change)
-                        radius={noise.radius * 111320}
-                        color={getColor(noise.decibels)}
-                        fillColor={getColor(noise.decibels)}
-                      />
-                    ))}
-                  </>
+                  <UserContext.Consumer>
+                    {(context) =>
+                      context.user ? (
+                        <>
+                          {date.data.map((noise, innerIndex) => (
+                            <Circle
+                              key={innerIndex}
+                              center={[noise.latitude, noise.longitude]}
+                              // Conversion rate from degrees to meters
+                              // (longitude has different rates depending on geolocation, might need to change)
+                              radius={noise.radius * 111320}
+                              color={getColor(noise.decibels)}
+                              fillColor={getColor(noise.decibels)}
+                            >
+                              <Popup>
+                                {noise.userId}
+                              </Popup>
+                            </Circle>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {date.data.map((noise, innerIndex) => (
+                            <Circle
+                              key={innerIndex}
+                              center={[noise.latitude, noise.longitude]}
+                              // Conversion rate from degrees to meters
+                              // (longitude has different rates depending on geolocation, might need to change)
+                              radius={noise.radius * 111320}
+                              color={getColor(noise.decibels)}
+                              fillColor={getColor(noise.decibels)}
+                            />
+                          ))}
+                        </>
+                      )
+                    }
+                  </UserContext.Consumer>
                 </Marker>
               </MapContainer>
             </VStack>

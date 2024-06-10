@@ -34,6 +34,7 @@ function Login() {
       setUsername("");
       setPassword("");
       setError("Invalid username or password");
+      window.alert("Invalid username or password");
     }
   }
 
