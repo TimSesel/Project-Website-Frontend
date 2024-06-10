@@ -6,6 +6,7 @@ import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
 import CardContent from "@mui/joy/CardContent";
 import DecibelChart from "./DecibelChart";
+import RadiusChart from "./RadiusChart";
 import PieChart from "./PieChart";
 
 function Profile(){
@@ -37,6 +38,7 @@ function Profile(){
                 {userNoiseData.length > 0 ? (
                     <Card>
                         <Box sx={{pl:'15%', pr:'15%'}}><DecibelChart data={userNoiseData} /></Box>
+                        <Box sx={{pl:'15%', pr:'15%'}}><RadiusChart data={userNoiseData} /></Box>
                         <Box sx={{pl:'15%', pr:'15%'}}><PieChart data={userNoiseData} /></Box>
                     </Card>
                 ) : (

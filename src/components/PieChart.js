@@ -41,7 +41,20 @@ const PieChart = ({ data }) => {
         }]
     };
 
-    return <Pie data={chartData} />;
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'User Distribution Of Noise Levels',
+            },
+        },
+    };
+
+    return <Pie data={chartData} options={options} />;
 };
 
 export default PieChart;
